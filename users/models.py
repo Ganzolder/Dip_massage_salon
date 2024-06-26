@@ -61,7 +61,7 @@ class User(AbstractUser):
 
 
 class Course(models.Model):
-    title = models.CharField(max_length=50, verbose_name='Специализация', **NULLABLE, help_text='Укажите специализацию')
+    title = models.CharField(max_length=50, verbose_name='Курс', **NULLABLE, help_text='Укажите курс')
 
     def __str__(self):
         return self.title
