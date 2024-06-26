@@ -14,7 +14,6 @@ class UserCreateView(CreateView):
 
     form_class = UserRegisterForm
 
-    """permission_required = 'catalog:add_product'"""
     success_url = reverse_lazy('users:login')
 
     def form_valid(self, form):
@@ -33,6 +32,7 @@ class UserCreateView(CreateView):
             recipient_list=[user.email]
         )
         return super().form_valid(form)
+
 
 def email_verification(request, token):
     user = get_object_or_404(User, token=token)
