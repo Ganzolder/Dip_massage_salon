@@ -10,3 +10,14 @@ class StyleFormMixin(forms.Form):
                 field.widget.attrs['class'] = 'form-check-input'
             else:
                 field.widget.attrs['class'] = 'form-control form-floating'
+
+
+class ApppointmentForm(StyleFormMixin, forms.ModelForm):
+
+    class Meta:
+        model = Apppointment
+        fields = ('name', 'surname', 'course', 'phone', 'date')
+        widgets = {
+            'course': forms.ChoiceField(),
+            'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }

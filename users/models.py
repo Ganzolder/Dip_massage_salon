@@ -67,15 +67,15 @@ class Course(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = 'Специализация'
-        verbose_name_plural = 'Специализации'
+        verbose_name = 'Курс'
+        verbose_name_plural = 'Курсы'
 
 
 class Masseur(models.Model):
     name = models.CharField(max_length=35, verbose_name='Имя', help_text='Укажите имя')
     surname = models.CharField(max_length=75, verbose_name='Фамилия', help_text='Укажите фамилию')
     photo = models.ImageField(upload_to='user/masseur', verbose_name='Фото', **NULLABLE, help_text='Загрузите фото')
-    speciality = models.ForeignKey(Course, on_delete=models.CASCADE, help_text='Укажите специализацию')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, help_text='Укажите специализацию')
 
     def __str__(self):
         return self.name

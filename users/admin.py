@@ -14,4 +14,4 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Masseur)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'surname', 'speciality')
+    list_display = ('id', 'name', 'surname', 'course')
