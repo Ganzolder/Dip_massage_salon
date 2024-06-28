@@ -1,5 +1,5 @@
 from django.contrib import admin
-from users.models import User, Course, Masseur
+from users.models import User, Masseur
 
 
 @admin.register(User)
@@ -7,11 +7,6 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'email', 'phone',)
 
 
-@admin.register(Course)
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title')
-
-
 @admin.register(Masseur)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'surname', 'course')
+    list_display = ('id', 'name', 'surname')

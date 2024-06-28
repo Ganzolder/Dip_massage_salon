@@ -19,7 +19,7 @@ class ApppointmentForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Apppointment
-        fields = ('name', 'surname', 'service', 'course', 'phone', 'date')
+        fields = ('name', 'surname', 'service', 'phone', 'date')
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
@@ -29,5 +29,5 @@ class ServicesForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Services
-        fields = ('title', 'content', 'course', 'price', 'top_service')
+        fields = ('title', 'content', 'price', 'top_service')
 

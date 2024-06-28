@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 
-from users.models import Course, Masseur, User
+from users.models import Masseur, User
 
 NULLABLE = {'blank': True, 'null': True}
 
@@ -11,7 +11,6 @@ class Services(models.Model):
     content = models.TextField(verbose_name='Содержимое', **NULLABLE)
     image = models.ImageField(verbose_name='Изображение', upload_to='services/images/', **NULLABLE)
     icon = models.ImageField(verbose_name='Иконка', upload_to='services/icons/', **NULLABLE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, **NULLABLE)
     price = models.DecimalField(verbose_name='Стоимость', max_digits=10, decimal_places=2, **NULLABLE)
     top_service = models.BooleanField(verbose_name='Топ услуга', default=False)
     objects = models.Manager()
@@ -31,7 +30,6 @@ class Apppointment(models.Model):
     surname = models.CharField(max_length=100, **NULLABLE, verbose_name='Фамилия клиента')
     phone = models.CharField(max_length=100, **NULLABLE, verbose_name='Телефон клиента')
     service = models.ForeignKey(Services, on_delete=models.CASCADE, **NULLABLE, verbose_name="Массаж")
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, **NULLABLE, verbose_name='Курс')
     masseur = models.ForeignKey(Masseur, on_delete=models.CASCADE, **NULLABLE, verbose_name='Массажист')
     date = models.DateTimeField(verbose_name='Дата и время записи', **NULLABLE)
     objects = models.Manager()

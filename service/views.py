@@ -114,12 +114,6 @@ class ApppointmentUpdateView(UpdateView):
             form.add_error('date', 'Заполните поле даты и времени.')
             return self.form_invalid(form)
 
-        course = self.request.POST.get('course')
-
-        if not course:
-            form.add_error('course', 'Заполните поле курса.')
-            return self.form_invalid(form)
-
         self.object.start_at = make_aware(parse_datetime(self.request.POST['date']))
         self.object.save()
         form.save_m2m()
@@ -234,7 +228,6 @@ class ServicesDetailView(DetailView):
         context_data['title'] = service.title
         context_data['content'] = service.content
         context_data['image'] = service.image
-        context_data['course'] = service.course
         context_data['price'] = service.price
         context_data['top_service'] = service.top_service
 

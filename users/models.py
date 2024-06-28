@@ -63,22 +63,11 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
 
-class Course(models.Model):
-    title = models.CharField(max_length=50, verbose_name='Курс', **NULLABLE, help_text='Укажите курс')
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = 'Курс'
-        verbose_name_plural = 'Курсы'
-
 
 class Masseur(models.Model):
     name = models.CharField(max_length=35, verbose_name='Имя', help_text='Укажите имя')
     surname = models.CharField(max_length=75, verbose_name='Фамилия', help_text='Укажите фамилию')
     photo = models.ImageField(upload_to='user/masseur', verbose_name='Фото', **NULLABLE, help_text='Загрузите фото')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, help_text='Укажите специализацию')
     objects = models.Manager()
 
     def __str__(self):
