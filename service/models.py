@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from users.models import Course, Masseur, User
@@ -24,16 +25,18 @@ class Services(models.Model):
 
 
 class Apppointment(models.Model):
-    name = models.ForeignKey(User, related_name='client_name', on_delete=models.CASCADE, **NULLABLE, verbose_name='Имя клиента')
-    surname = models.ForeignKey(User, related_name='client_surname', on_delete=models.CASCADE, **NULLABLE, verbose_name='Фамилия клиента')
-    phone = models.ForeignKey(User, related_name='client_phone', on_delete=models.CASCADE, **NULLABLE, verbose_name='Телефон клиента')
-    course = models.ForeignKey(Course,related_name='added_course', on_delete=models.CASCADE, **NULLABLE, verbose_name='Курс')
-    masseur = models.ForeignKey(Masseur, related_name='masseur_surname', on_delete=models.CASCADE, **NULLABLE, verbose_name='Массажист')
+
+    email = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Почта")
+    name = models.CharField(max_length=100, **NULLABLE, verbose_name='Имя клиента')
+    surname = models.CharField(max_length=100, **NULLABLE, verbose_name='Фамилия клиента')
+    phone = models.CharField(max_length=100, **NULLABLE, verbose_name='Телефон клиента')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, **NULLABLE, verbose_name='Курс')
+    masseur = models.ForeignKey(Masseur, on_delete=models.CASCADE, **NULLABLE, verbose_name='Массажист')
     date = models.DateField(verbose_name='Дата и время записи', **NULLABLE)
     objects = models.Manager()
 
     def __str__(self):
-        return self.name
+        return f"{self.name} {self.surname}" if self.name and self.surname else "Appointment"
 
     class Meta:
         verbose_name = "Запись на массаж"
