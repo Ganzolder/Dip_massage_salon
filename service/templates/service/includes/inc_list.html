@@ -24,8 +24,9 @@
                                         <li>{{ object.content|truncatechars_html:150 }}</li>
 
                                     </ul>
+
                                     <a class="w-100 btn btn-lg btn-outline-dark mb-3"
-                                       href="{% url 'blog:blog_detail' object.pk %}">Записаться</a>
+                                       href="{% url 'service:app_form' service_id=object.id %}">Записаться</a>
                                     <a href="{% url 'service:update_form' object.pk %}" type="button"
                                        class="w-100 mb-4 btn btn-lg btn-outline-primary">Редактировать</a>
                                     <a href="{% url 'service:services_delete' object.pk %}" type="button"

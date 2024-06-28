@@ -1,0 +1,48 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="col">
+            <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-3">
+                    <h4 class="my-0 fw-normal">Список записей на массаж</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Дата визита</th>
+                                <th scope="col">Массаж</th>
+                                <th scope="col">Имя</th>
+                                <th scope="col">Фамилия</th>
+                                <th scope="col">Телефон</th>
+                                <th scope="col">Массажист</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for appointment in objects_list %}
+                            <tr>
+                                <td><a href="{% url 'service:app_update' appointment.id %}">{{ forloop.counter }}</a></td>
+                                <td>{{ appointment.date }}</td>
+                                <td>{{ appointment.service }}</td>
+                                <td>{{ appointment.name }}</td>
+                                <td>{{ appointment.surname }}</td>
+                                <td>{{ appointment.phone }}</td>
+                                <td>{{ appointment.masseur }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3">Нет записей на массаж.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

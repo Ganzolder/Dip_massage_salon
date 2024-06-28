@@ -19,7 +19,7 @@ class ApppointmentForm(StyleFormMixin, forms.ModelForm):
 
     class Meta:
         model = Apppointment
-        fields = ('name', 'surname', 'service', 'phone', 'date')
+        fields = ('name', 'surname', 'service', 'phone', 'date', 'masseur')
         widgets = {
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }

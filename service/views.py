@@ -29,7 +29,15 @@ class IndexView(TemplateView):
 class ApppointmentCreateView(CreateView):
     model = Apppointment
     form_class = ApppointmentForm
-    success_url = reverse_lazy('service:index')
+    success_url = reverse_lazy('service:apppointment_form_success')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        service_id = self.kwargs.get('service_id')
+        if service_id:
+            initial['service'] = service_id
+        return initial
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
@@ -60,6 +68,10 @@ class ApppointmentCreateView(CreateView):
     '''context_data['objects_list'] = Post.objects.filter(creator=self.request.user).order_by('-enabled')
         context_data['title'] = f'Список рассылок в базе'
         context_data['object_type'] = 'post'''
+
+
+class ApppointmentFormSuccessView(TemplateView):
+    template_name = 'service/apppointment_form_success.html'
 
 
 class ApppointmentDetailView(DetailView):
@@ -95,6 +107,14 @@ class ApppointmentDetailView(DetailView):
 class ApppointmentUpdateView(UpdateView):
     model = Apppointment
     form_class = ApppointmentForm
+    success_url = reverse_lazy('service:apppointment_form_success')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        service_id = self.kwargs.get('service_id')
+        if service_id:
+            initial['service'] = service_id
+        return initial
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -105,28 +125,31 @@ class ApppointmentUpdateView(UpdateView):
         self.object = form.save(commit=False)
         self.object.creator = self.request.user
 
-        start_at_str = self.request.POST.get('date')
+        current_date = self.object
+        print(self.object.date)
+        # Получаем новое значение date из POST запроса
+        new_date_str = self.request.POST.get('date')
 
-        if start_at_str:
-            start_at = parse_datetime(start_at_str)
-            self.object.start_at = make_aware(start_at)
+        if new_date_str:
+            new_date = parse_datetime(new_date_str)
+            self.object.date = make_aware(new_date)
         else:
+            # Если поле date не заполнено, возвращаем ошибку
             form.add_error('date', 'Заполните поле даты и времени.')
             return self.form_invalid(form)
 
-        self.object.start_at = make_aware(parse_datetime(self.request.POST['date']))
+        # Если текущее значение date не изменилось, сохраняем его
+        if current_date:
+            self.object.date = current_date
+
         self.object.save()
-        form.save_m2m()
+
         return super().form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
-        pass
 
-        '''context_data = super().get_context_data(*args, **kwargs)
-        context_data['objects_list'] = Post.objects.filter(creator=self.request.user).order_by('-enabled')
-        context_data['title'] = f'Список рассылок в базе'
-        context_data['object_type'] = 'post
-        return context_data'''
+        context_data = super().get_context_data(**kwargs)
+        return context_data
 
 
 class ApppointmentDeleteView(DeleteView):
@@ -153,17 +176,14 @@ class ApppointmentConfirmDeleteView(TemplateView):
 
 
 class ApppointmentListAdminView(ListView):
-    template_name = 'service/apppointment_list.html'
 
+    template_name = 'service/apppointment_list.html'
     model = Apppointment
 
     def get_context_data(self, *args, **kwargs):
-        pass
-        '''context_data = super().get_context_data(*args, **kwargs)
-        from main.services import get_posts_from_cache
-        context_data['objects_list'] = get_posts_from_cache()
-        context_data['object_type'] = 'post
-        return context_data'''
+        context_data = super().get_context_data(*args, **kwargs)
+        context_data['objects_list'] = Apppointment.objects.all()
+        return context_data
 
 
 class ServicesCreateView(CreateView):
