@@ -1,5 +1,5 @@
 from django import forms
-from service.models import Masseur, Apppointment
+from service.models import Masseur, Apppointment, Services
 
 
 class StyleFormMixin(forms.Form):
@@ -21,3 +21,11 @@ class ApppointmentForm(StyleFormMixin, forms.ModelForm):
             'course': forms.ChoiceField(),
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+
+class ServicesForm(StyleFormMixin, forms.ModelForm):
+
+    class Meta:
+        model = Services
+        fields = ('title', 'content', 'course', 'price', 'top_service')
+

@@ -13,6 +13,9 @@ class User(AbstractUser):
     age = models.SmallIntegerField(verbose_name='Возраст', **NULLABLE, help_text='Введите возраст')
     avatar = models.ImageField(upload_to='user/avatar/', verbose_name='Аватар', **NULLABLE, help_text='Загрузите аватар')
     phone = models.CharField(max_length=35, verbose_name='Телефон', **NULLABLE, help_text='Введите телефон')
+    enabled = models.BooleanField(default=True, verbose_name='Активен')
+    token = models.CharField(max_length=100, verbose_name="Token", blank=True, null=True)
+    objects = models.Manager()
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -76,6 +79,7 @@ class Masseur(models.Model):
     surname = models.CharField(max_length=75, verbose_name='Фамилия', help_text='Укажите фамилию')
     photo = models.ImageField(upload_to='user/masseur', verbose_name='Фото', **NULLABLE, help_text='Загрузите фото')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, help_text='Укажите специализацию')
+    objects = models.Manager()
 
     def __str__(self):
         return self.name

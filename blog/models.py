@@ -11,6 +11,7 @@ class BlogPost(models.Model):
     date_of_creation = models.DateField(verbose_name='дата создания', auto_now_add=True)
     is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, **NULLABLE)
+    objects = models.Manager()
 
     def __str__(self):
         return self.title

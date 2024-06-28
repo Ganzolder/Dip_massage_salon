@@ -12,6 +12,8 @@ class Services(models.Model):
     icon = models.ImageField(verbose_name='Иконка', upload_to='services/icons/', **NULLABLE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, **NULLABLE)
     price = models.DecimalField(verbose_name='Стоимость', max_digits=10, decimal_places=2, **NULLABLE)
+    top_service = models.BooleanField(verbose_name='Топ услуга', default=False)
+    objects = models.Manager()
 
     def __str__(self):
         return self.title
@@ -28,6 +30,7 @@ class Apppointment(models.Model):
     course = models.ForeignKey(Course,related_name='added_course', on_delete=models.CASCADE, **NULLABLE, verbose_name='Курс')
     masseur = models.ForeignKey(Masseur, related_name='masseur_surname', on_delete=models.CASCADE, **NULLABLE, verbose_name='Массажист')
     date = models.DateField(verbose_name='Дата и время записи', **NULLABLE)
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
