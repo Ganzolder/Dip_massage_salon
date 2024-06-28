@@ -29,7 +29,7 @@ class IndexView(TemplateView):
 class ApppointmentCreateView(CreateView):
     model = Apppointment
     form_class = ApppointmentForm
-
+    success_url = reverse_lazy('service:index')
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
@@ -48,14 +48,7 @@ class ApppointmentCreateView(CreateView):
             form.add_error('date', 'Заполните поле даты и времени.')
             return self.form_invalid(form)
 
-        course = self.request.POST.get('course')
-
-        if not course:
-            form.add_error('course', 'Заполните поле курса.')
-            return self.form_invalid(form)
-
         self.object.save()
-        form.save_m2m()
 
         return super().form_valid(form)
 

@@ -26,13 +26,14 @@ class Services(models.Model):
 
 class Apppointment(models.Model):
 
-    email = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Почта")
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Почта")
     name = models.CharField(max_length=100, **NULLABLE, verbose_name='Имя клиента')
     surname = models.CharField(max_length=100, **NULLABLE, verbose_name='Фамилия клиента')
     phone = models.CharField(max_length=100, **NULLABLE, verbose_name='Телефон клиента')
+    service = models.ForeignKey(Services, on_delete=models.CASCADE, **NULLABLE, verbose_name="Массаж")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, **NULLABLE, verbose_name='Курс')
     masseur = models.ForeignKey(Masseur, on_delete=models.CASCADE, **NULLABLE, verbose_name='Массажист')
-    date = models.DateField(verbose_name='Дата и время записи', **NULLABLE)
+    date = models.DateTimeField(verbose_name='Дата и время записи', **NULLABLE)
     objects = models.Manager()
 
     def __str__(self):

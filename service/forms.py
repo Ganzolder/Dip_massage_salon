@@ -13,12 +13,14 @@ class StyleFormMixin(forms.Form):
 
 
 class ApppointmentForm(StyleFormMixin, forms.ModelForm):
+    def __init__(self, user=None, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
 
     class Meta:
         model = Apppointment
-        fields = ('name', 'surname', 'course', 'phone', 'date')
+        fields = ('name', 'surname', 'service', 'course', 'phone', 'date')
         widgets = {
-            'course': forms.ChoiceField(),
             'date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
 
