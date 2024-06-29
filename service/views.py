@@ -1,7 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
-import datetime as dt
-
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.dateparse import parse_datetime
@@ -10,8 +8,6 @@ from django.views.generic import DetailView, TemplateView, CreateView, UpdateVie
 from service.forms import ApppointmentForm, ServicesForm
 from service.models import Services, Apppointment
 from django.utils.timezone import make_aware
-
-from users.models import User
 
 
 class IndexView(TemplateView):
@@ -44,7 +40,11 @@ class ApppointmentCreateView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        self.object.creator = self.request.user
+
+        if self.request.user.is_authenticated:
+            self.object.creator = self.request.user
+        else:
+            self.object.creator = None
 
         start_at_str = self.request.POST.get('date')
 
@@ -59,14 +59,10 @@ class ApppointmentCreateView(CreateView):
 
         return super().form_valid(form)
 
-
     def get_context_data(self, *args, **kwargs):
 
         context_data = super().get_context_data(**kwargs)
         return context_data
-    '''context_data['objects_list'] = Post.objects.filter(creator=self.request.user).order_by('-enabled')
-        context_data['title'] = f'Список рассылок в базе'
-        context_data['object_type'] = 'post'''
 
 
 class ApppointmentFormSuccessView(TemplateView):
@@ -79,34 +75,14 @@ class ApppointmentDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-
-        '''course = self.get_object()
-        recipients = message.recipient.all()
-        messages = message.message
-
-        if message.enabled is True:
-            context_data['enabled'] = 'Активно'
-        else:
-            context_data['enabled'] = 'Не активно'
-
-        context_data['title'] = f'Название рассылки: {message.name}'
-        context_data['text'] = f'{message.description}'
-        context_data['creator'] = f'Автор: {message.creator}'
-        context_data['recipients'] = recipients
-        context_data['object_type'] = 'recipient'
-        context_data['message'] = messages
-        context_data['post_status'] = message.status
-        context_data['period'] = message.period
-        context_data['start_at'] = message.start_at
-        context_data['next_send_date'] = message.next_send_date'''
-
         return context_data
 
 
-class ApppointmentUpdateView(UpdateView):
+class ApppointmentUpdateView(PermissionRequiredMixin, UpdateView):
     model = Apppointment
     form_class = ApppointmentForm
     success_url = reverse_lazy('service:app_list')
+    permission_required = 'change_appointment'
 
     def get_initial(self):
         initial = super().get_initial()
@@ -146,21 +122,24 @@ class ApppointmentUpdateView(UpdateView):
         return context_data
 
 
-class ApppointmentDeleteView(DeleteView):
+class ApppointmentDeleteView(LoginRequiredMixin, DeleteView):
     model = Apppointment
 
     def post(self, request, *args, **kwargs):
         # Получаем объект по первичному ключу (pk)
         obj = get_object_or_404(Apppointment, pk=kwargs['pk'])
 
-        # Удаляем объект
-        obj.delete()
+        if request.user.is_superuser:
+            obj.delete()
+            return redirect('service:app_list')
+        if obj.creator == request.user:
+            obj.delete()
+            return redirect('users:user_detail')
+        else:
+            return redirect('users:user_detail')
 
-        # Перенаправляем на нужную страницу после удаления
-        return redirect('service:app_list')
 
-
-class ApppointmentConfirmDeleteView(TemplateView):
+class ApppointmentConfirmDeleteView(LoginRequiredMixin, TemplateView):
     template_name = 'service/apppointment_confirm_delete.html'
 
     def get_context_data(self, **kwargs):
@@ -169,10 +148,11 @@ class ApppointmentConfirmDeleteView(TemplateView):
         return context
 
 
-class ApppointmentListAdminView(ListView):
+class ApppointmentListAdminView(PermissionRequiredMixin, ListView):
 
     template_name = 'service/apppointment_list.html'
     model = Apppointment
+    permission_required = 'view_admin_list_app'
 
     def get_context_data(self, *args, **kwargs):
         context_data = super().get_context_data(*args, **kwargs)
@@ -180,10 +160,12 @@ class ApppointmentListAdminView(ListView):
         return context_data
 
 
-class ServicesCreateView(CreateView):
+class ServicesCreateView(PermissionRequiredMixin, CreateView):
     model = Services
     form_class = ServicesForm
     success_url = reverse_lazy('service:services_list')
+    permission_required = 'create_services'
+
     def form_valid(self, form):
         self.object = form.save()
         self.object.creator = self.request.user
@@ -211,10 +193,12 @@ class ServicesListView(ListView):
         return context_data
 
 
-class ServicesUpdateView(UpdateView):
+class ServicesUpdateView(PermissionRequiredMixin, UpdateView):
     model = Services
     form_class = ServicesForm
     success_url = reverse_lazy('service:services_list')
+    permission_required = 'change_services'
+
     def form_valid(self, form):
         self.object = form.save()
         self.object.creator = self.request.user
@@ -222,10 +206,8 @@ class ServicesUpdateView(UpdateView):
         return super().form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
-        context_data = super().get_context_data(*args, **kwargs)
-        # context_data['objects_list'] = Services.objects.filter(creator=self.request.user).order_by('-enabled')
+        context_data = super().get_context_data(**kwargs)
         context_data['title'] = f'Изменить услугу'
-        # context_data['object_type'] = 'message'
 
         return context_data
 
@@ -248,8 +230,9 @@ class ServicesDetailView(DetailView):
         return context_data
 
 
-class ServicesDeleteView(DeleteView):
+class ServicesDeleteView(PermissionRequiredMixin, DeleteView):
     model = Services
+    permission_required = 'delete_services'
 
     def post(self, request, *args, **kwargs):
         # Получаем объект по первичному ключу (pk)
@@ -262,27 +245,11 @@ class ServicesDeleteView(DeleteView):
         return redirect('service:services_list')
 
 
-class ServicesConfirmDeleteView(TemplateView):
+class ServicesConfirmDeleteView(PermissionRequiredMixin, TemplateView):
     template_name = 'service/services_confirm_delete.html'
+    permission_required = 'delete_services'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object'] = get_object_or_404(Services, pk=kwargs['pk'])
         return context
-
-'''
-class ApppointmentListAdminView(ListView):
-    template_name = 'service/apppointment_list.html'
-
-    model = Apppointment
-
-    def get_context_data(self, *args, **kwargs):
-        pass
-     context_data = super().get_context_data(*args, **kwargs)
-        from main.services import get_posts_from_cache
-        context_data['objects_list'] = get_posts_from_cache()
-        context_data['object_type'] = 'post
-        return context_data'''
-
-
-

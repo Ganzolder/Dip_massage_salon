@@ -156,9 +156,8 @@
     height: 50%;
     background-color: rgba(0, 0, 0, 0.3); /* Полупрозрачный белый цвет */
     z-index: 3; /* Подложить под текст */
-
-
 }
+
     .bg-dark-t {
     background-color: rgba(0, 0, 0, 0.2); /* Цвет фона с прозрачностью 50% (0.5) */
     /* Другие стили */
@@ -203,13 +202,20 @@
                     </a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'service:index' %}">Главная</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'service:services_list' %}">Услуги</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Блог</a></li>
+
+
+
+
+                    {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'users:user_detail' %}">Ваши записи на
                         массаж</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'users:register' %}">Зарегистрироваться</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'users:login' %}">Войти</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'users:logout' %}">Выйти</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'users:register' %}">Зарегистрироваться</a>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'users:login' %}">Войти</a></li>
+
+                    {% endif %}
+
                     <li class="nav-item"><a class="nav-link" href="#">
                         <svg class="bi" width="24" height="24">
                             <use xlink:href="#cart"/>
@@ -220,7 +226,7 @@
         </div>
     </div>
 </nav>
-
+{% if request.user.is_superuser %}
 <div class="col--md-5 p-lg-1 mx-auto my-1">
     <div class="d-flex gap-5 justify-content-center lead fw-normal">
 
@@ -236,7 +242,7 @@
 
     </div>
 </div>
-
+{% endif %}
 {% block content %}
 {% endblock %}
 
@@ -254,7 +260,7 @@
                 </ul>
             <small class="d-block mb-3 text-body-secondary">&copy; 2024–2024</small>
         </div>
-
+    </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

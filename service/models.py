@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.db import models
 
 from users.models import Masseur, User
@@ -25,7 +24,7 @@ class Services(models.Model):
 
 class Apppointment(models.Model):
 
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Почта")
+    creator = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Почта", **NULLABLE)
     name = models.CharField(max_length=100, **NULLABLE, verbose_name='Имя')
     surname = models.CharField(max_length=100, **NULLABLE, verbose_name='Фамилия')
     phone = models.CharField(max_length=100, **NULLABLE, verbose_name='Телефон')

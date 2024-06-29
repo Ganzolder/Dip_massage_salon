@@ -18,7 +18,7 @@
                             <a href="{% url 'service:services_detail' object.pk %}"
                                style="text-decoration: none; color: inherit;">
                                 <div class="card-body text-bg-dark flex-fill" >
-                                    <h1 class="card-title pricing-card-title text-end">{{ object.price }}р. / 90 мин</h1>
+                                    <h1 class="card-title pricing-card-title text-end">{{object.price}}р. / 90 мин</h1>
                                     <h3 class="text-body-light fw-light"> {{ object.title }}</h3>
                                     <ul class="list-unstyled mt-3 mb-4">
                                         <li>{{ object.content|truncatechars_html:150 }}</li>
@@ -28,10 +28,12 @@
 
                                     <a class="w-100 btn btn-lg btn-outline-light mb-3"
                                        href="{% url 'service:app_form' service_id=object.id %}">Записаться</a>
+                                    {% if request.user.is_superuser %}
                                     <a href="{% url 'service:update_form' object.pk %}" type="button"
                                        class="w-100 mb-4 btn btn-lg btn-outline-primary">Редактировать</a>
                                     <a href="{% url 'service:services_delete' object.pk %}" type="button"
                                        class="w-100 mb-4 btn btn-lg btn-outline-primary">Удалить</a>
+                                    {% endif %}
                                 </div>
                             </a>
                         </div>

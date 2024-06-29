@@ -1,17 +1,23 @@
 {% extends 'service/base.html' %}
-
+{% load media_tags %}
 {% block content %}
-<div class="row">
-    <div class="col-6">
-        <div class="col">
-            <div class="card mb-4 rounded-3 shadow-sm">
-                <div class="card-header py-3">
-                    <h4 class="my-0 fw-normal">Вы успешно записались!</h4>
+<div class="container">
+    <div class="position-relative overflow-hidden text-center bg-body-tertiary">
+
+        <div class="hero-image-container-sm ">
+            <img src="{% media 'services/images/head.jpg' %}" alt="Hero Banner" class="hero-image-top">
+
+            <div class="col-md-8 p-lg-5 mx-auto my-5">
+
+                <div class="hero-text">
+                    <h1 class="display-3 fw-bold">Вы успешно записались!</h1>
+
+
                 </div>
 
             </div>
+
         </div>
     </div>
-
 </div>
 {% endblock %}

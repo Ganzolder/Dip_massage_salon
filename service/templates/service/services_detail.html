@@ -35,6 +35,7 @@
                     </ul>
                     <a class="w-50 btn btn-lg btn-outline-light mb-3"
                        href="{% url 'service:app_form' service_id=object.id %}">Записаться</a>
+                    {% if request.user.is_superuser %}
                     <a href="{% url 'service:update_form' object.pk %}" type="button"
                        class="w-50 mb-4 btn btn-lg btn-outline-primary">Редакитровать</a>
                     <form method="post" action="">
@@ -42,6 +43,7 @@
                         <a href="{% url 'service:services_delete' object.pk %}" type="button"
                            class="w-50 mb-4 btn btn-lg btn-outline-primary">Удалить</a>
                     </form>
+                     {% endif %}
                 </div>
             </div>
         </div>

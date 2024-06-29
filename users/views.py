@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -36,7 +37,7 @@ class UserCreateView(CreateView):
         return super().form_valid(form)
 
 
-def email_verification(request, token):
+def email_verification(token):
     user = get_object_or_404(User, token=token)
     user.is_active = True
     user.token = ''
@@ -44,10 +45,12 @@ def email_verification(request, token):
     return redirect(reverse("users:login"))
 
 
-class MasseurCreateView(CreateView):
+class MasseurCreateView(PermissionRequiredMixin, CreateView):
     model = Masseur
     form_class = MasseurForm
     success_url = reverse_lazy('users:masseur_list')
+    permission_required = 'create_masseur'
+
     def form_valid(self, form):
         self.object = form.save()
         self.object.creator = self.request.user
@@ -63,8 +66,9 @@ class MasseurCreateView(CreateView):
         return context_data
 
 
-class MasseurListAdminView(ListView):
+class MasseurListAdminView(PermissionRequiredMixin, ListView):
     template_name = 'masseur_list.html'
+    permission_required = 'view_masseurs'
 
     model = Masseur
 
@@ -75,10 +79,12 @@ class MasseurListAdminView(ListView):
         return context_data
 
 
-class MasseurUpdateView(UpdateView):
+class MasseurUpdateView(PermissionRequiredMixin, UpdateView):
     model = Masseur
     form_class = MasseurForm
     success_url = reverse_lazy('users:masseur_list')
+    permission_required = 'change_masseur'
+
     def form_valid(self, form):
         self.object = form.save()
         self.object.creator = self.request.user
@@ -86,7 +92,7 @@ class MasseurUpdateView(UpdateView):
         return super().form_valid(form)
 
     def get_context_data(self, *args, **kwargs):
-        context_data = super().get_context_data(*args, **kwargs)
+        context_data = super().get_context_data(**kwargs)
         # context_data['objects_list'] = Services.objects.filter(creator=self.request.user).order_by('-enabled')
         context_data['title'] = f'Изменить услугу'
         # context_data['object_type'] = 'message'
@@ -94,9 +100,10 @@ class MasseurUpdateView(UpdateView):
         return context_data
 
 
-class MasseurDetailView(DetailView):
+class MasseurDetailView(PermissionRequiredMixin, DetailView):
     model = Masseur
     template_name = 'users/masseur_detail.html'
+    permission_required = 'view_masseurs'
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -109,13 +116,12 @@ class MasseurDetailView(DetailView):
         context_data['description'] = masseur.description
         context_data['phone'] = masseur.phone
 
-
-
         return context_data
 
 
-class MasseurDeleteView(DeleteView):
+class MasseurDeleteView(PermissionRequiredMixin, DeleteView):
     model = Masseur
+    permission_required = 'delete_masseur'
 
     def post(self, request, *args, **kwargs):
         # Получаем объект по первичному ключу (pk)
@@ -128,8 +134,9 @@ class MasseurDeleteView(DeleteView):
         return redirect('users:masseur_list')
 
 
-class MasseurConfirmDeleteView(TemplateView):
+class MasseurConfirmDeleteView(PermissionRequiredMixin, TemplateView):
     template_name = 'users/masseur_confirm_delete.html'
+    permission_required = 'delete_masseur'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -137,23 +144,21 @@ class MasseurConfirmDeleteView(TemplateView):
         return context
 
 
-class UserTemplateView(TemplateView):
+class UserTemplateView(LoginRequiredMixin, TemplateView):
     model = User
     template_name = 'users/user_detail.html'
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
 
-        User = self.request.user
+        user = self.request.user
 
-        context_data['first_name'] = User.first_name
-        context_data['second_name'] = User.second_name
-        context_data['avatar'] = User.avatar
-        context_data['age'] = User.age
-        context_data['email'] = User.email
-        context_data['phone'] = User.phone
+        context_data['first_name'] = user.first_name
+        context_data['second_name'] = user.second_name
+        context_data['avatar'] = user.avatar
+        context_data['age'] = user.age
+        context_data['email'] = user.email
+        context_data['phone'] = user.phone
         context_data['app_service_list'] = Apppointment.objects.filter(creator=self.request.user)
 
         return context_data
-
-

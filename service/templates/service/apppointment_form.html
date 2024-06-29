@@ -20,33 +20,34 @@
         </div>
     </div>
 
-<div class="row row-cols-1 mb-4  text-center d-flex justify-content-center align-items-center mt-5">
-    <div class="col-6 ">
-        <div class="col">
-            <div class="text-bg-dark pt-3 px-3 card mb-4 rounded-3 shadow-sm lead">
-                <div class="card-body">
-                    <div class="col-12 col-form-label">
-                        <div class="card-body ">
-                            <form method="post" enctype="multipart/form-data"
-                                  class="col-12 col-form-label form-floating">
-                                {% csrf_token %}
-                                       <div class="mb-3">
-                            <h4 class="my-0 fw-normal">Дата и время записи: {{ object.date|date:"Y-m-d H:i" }}</h4>
-                                       </div>
-                                {{ form.as_p }}
-                                <div class="mb-3">
-                                    <button type="submit" class="btn btn-success">Записаться</button>
-                                </div>
+    <div class="row row-cols-1 mb-4  text-center d-flex justify-content-center align-items-center mt-5">
+        <div class="col-6 ">
+            <div class="col">
+                <div class="text-bg-dark pt-3 px-3 card mb-4 rounded-3 shadow-sm lead">
+                    <div class="card-body">
+                        <div class="col-12 col-form-label">
+                            <div class="card-body ">
+                                <form method="post" enctype="multipart/form-data"
+                                      class="col-12 col-form-label form-floating">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <h4 class="my-0 fw-normal">Дата и время записи: {{ object.date|date:"Y-m-d H:i"
+                                            }}</h4>
+                                    </div>
+                                    {{ form.as_p }}
+                                    <div class="mb-3">
+                                        <button type="submit" class="btn btn-success">Записаться</button>
+                                    </div>
 
 
-                            </form>
+                                </form>
+                            </div>
+
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 {% endblock %}

@@ -1,7 +1,6 @@
 from django import forms
-from django.utils.timezone import localtime
 
-from service.models import Masseur, Apppointment, Services
+from service.models import Apppointment, Services
 
 
 class StyleFormMixin(forms.Form):
@@ -32,4 +31,3 @@ class ServicesForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Services
         fields = ('title', 'content', 'price', 'top_service', 'image')
-
