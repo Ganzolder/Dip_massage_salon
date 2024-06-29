@@ -11,7 +11,7 @@ class Services(models.Model):
     content = models.TextField(verbose_name='Содержимое', **NULLABLE)
     image = models.ImageField(verbose_name='Изображение', upload_to='services/images/', **NULLABLE)
     icon = models.ImageField(verbose_name='Иконка', upload_to='services/icons/', **NULLABLE)
-    price = models.DecimalField(verbose_name='Стоимость', max_digits=10, decimal_places=2, **NULLABLE)
+    price = models.DecimalField(verbose_name='Стоимость', max_digits=10, decimal_places=0, **NULLABLE)
     top_service = models.BooleanField(verbose_name='Топ услуга', default=False)
     objects = models.Manager()
 
@@ -26,9 +26,9 @@ class Services(models.Model):
 class Apppointment(models.Model):
 
     creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Почта")
-    name = models.CharField(max_length=100, **NULLABLE, verbose_name='Имя клиента')
-    surname = models.CharField(max_length=100, **NULLABLE, verbose_name='Фамилия клиента')
-    phone = models.CharField(max_length=100, **NULLABLE, verbose_name='Телефон клиента')
+    name = models.CharField(max_length=100, **NULLABLE, verbose_name='Имя')
+    surname = models.CharField(max_length=100, **NULLABLE, verbose_name='Фамилия')
+    phone = models.CharField(max_length=100, **NULLABLE, verbose_name='Телефон')
     service = models.ForeignKey(Services, on_delete=models.CASCADE, **NULLABLE, verbose_name="Массаж")
     masseur = models.ForeignKey(Masseur, on_delete=models.CASCADE, **NULLABLE, verbose_name='Массажист')
     date = models.DateTimeField(verbose_name='Дата и время записи', **NULLABLE)

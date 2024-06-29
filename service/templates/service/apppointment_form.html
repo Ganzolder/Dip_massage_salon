@@ -1,19 +1,38 @@
 {% extends 'service/base.html' %}
-
+{% load media_tags %}
 {% block content %}
-<div class="row">
-    <div class="col-6">
-        <div class="col">
-            <div class="card mb-4 rounded-3 shadow-sm">
-                <div class="card-header py-3">
-                    <h4 class="my-0 fw-normal">Запись на массаж</h4>
+<div class="container">
+    <div class="position-relative overflow-hidden text-center bg-body-tertiary">
+
+        <div class="hero-image-container-sm ">
+            <img src="{% media 'services/images/head.jpg' %}" alt="Hero Banner" class="hero-image">
+
+            <div class="col-md-8 p-lg-5 mx-auto my-5">
+
+                <div class="hero-text">
+                    <h1 class="display-3 fw-bold">Запись на массаж</h1>
+
+
                 </div>
+
+            </div>
+
+        </div>
+    </div>
+
+<div class="row row-cols-1 mb-4  text-center d-flex justify-content-center align-items-center mt-5">
+    <div class="col-6 ">
+        <div class="col">
+            <div class="text-bg-dark pt-3 px-3 card mb-4 rounded-3 shadow-sm lead">
                 <div class="card-body">
                     <div class="col-12 col-form-label">
                         <div class="card-body ">
                             <form method="post" enctype="multipart/form-data"
                                   class="col-12 col-form-label form-floating">
                                 {% csrf_token %}
+                                       <div class="mb-3">
+                            <h4 class="my-0 fw-normal">Дата и время записи: {{ object.date|date:"Y-m-d H:i" }}</h4>
+                                       </div>
                                 {{ form.as_p }}
                                 <div class="mb-3">
                                     <button type="submit" class="btn btn-success">Записаться</button>
@@ -22,7 +41,7 @@
 
                             </form>
                         </div>
-                        <div class="card-footer"></div>
+
                     </div>
                 </div>
             </div>

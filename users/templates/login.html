@@ -1,12 +1,32 @@
 {% extends 'service/base.html' %}
+{% load media_tags %}
 
 {% block content %}
+<div class="container">
+    <div class="position-relative overflow-hidden text-center bg-body-tertiary">
+
+        <div class="hero-image-container-sm ">
+            <img src="{% media 'services/images/head.jpg' %}" alt="Hero Banner" class="hero-image">
+
+            <div class="col-md-8 p-lg-5 mx-auto my-5">
+
+                <div class="hero-text">
+                    <h1 class="display-5 fw-bold">Вход</h1>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+<div class="row row-cols-1 mb-4  text-center d-flex justify-content-center align-items-center mt-5">
 <div class="col-6">
     <div class="col">
-        <div class="card mb-4 rounded-3 shadow-sm">
-            <div class="card-header py-3">
-                <h4 class="my-0 fw-normal">Войти</h4>
-            </div>
+        <div class="card mb-4 rounded-3 shadow-sm text-bg-dark pt-3 px-3 card mb-4 rounded-3 shadow-sm lead">
+
             <div class="card-body">
                 <div class="col-12 col-form-label">
                     <div class="card-body ">
@@ -25,5 +45,6 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

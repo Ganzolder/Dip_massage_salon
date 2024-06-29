@@ -12,6 +12,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
 
     path('app/add/<int:service_id>/', ApppointmentCreateView.as_view(), name='app_form'),
+    path('app/add/', ApppointmentCreateView.as_view(), name='app_form_empty'),
     path('app/success/', ApppointmentFormSuccessView.as_view(), name='apppointment_form_success'),
     path('app/detail/<int:pk>/', ApppointmentDetailView.as_view(), name='app_detail'),
     path('app/edit/<int:pk>/', ApppointmentUpdateView.as_view(), name='app_update'),

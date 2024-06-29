@@ -63,11 +63,12 @@ class User(AbstractUser):
         verbose_name_plural = 'Пользователи'
 
 
-
 class Masseur(models.Model):
-    name = models.CharField(max_length=35, verbose_name='Имя', help_text='Укажите имя')
-    surname = models.CharField(max_length=75, verbose_name='Фамилия', help_text='Укажите фамилию')
-    photo = models.ImageField(upload_to='user/masseur', verbose_name='Фото', **NULLABLE, help_text='Загрузите фото')
+    name = models.CharField(max_length=35, verbose_name='Имя', help_text='Укажите имя', **NULLABLE)
+    surname = models.CharField(max_length=75, verbose_name='Фамилия', help_text='Укажите фамилию', **NULLABLE)
+    description = models.TextField(max_length=1000, verbose_name='О массажисте', help_text='Напишите что-нибудь', **NULLABLE)
+    phone = models.CharField(max_length=35, verbose_name='Телефон', help_text='Укажите телефон', **NULLABLE)
+    photo = models.ImageField(upload_to='user/masseur/', verbose_name='Фото', **NULLABLE, help_text='Загрузите фото')
     objects = models.Manager()
 
     def __str__(self):

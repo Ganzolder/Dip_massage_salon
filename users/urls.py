@@ -1,7 +1,8 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 from users.apps import UsersConfig
-from users.views import UserCreateView, email_verification
+from users.views import UserCreateView, email_verification, MasseurCreateView, MasseurDetailView, MasseurUpdateView, \
+    MasseurConfirmDeleteView, MasseurDeleteView, MasseurListAdminView, UserTemplateView
 
 app_name = UsersConfig.name
 
@@ -10,4 +11,12 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', UserCreateView.as_view(), name='register'),
     path('email-confirm/<str:token>/', email_verification, name='email-confirm'),
+    path('detail/', UserTemplateView.as_view(), name='user_detail'),
+
+    path('masseur/add/', MasseurCreateView.as_view(), name='masseur_form'),
+    path('masseur/detail/<int:pk>/', MasseurDetailView.as_view(), name='masseur_detail'),
+    path('masseur/edit/<int:pk>/', MasseurUpdateView.as_view(), name='masseur_update'),
+    path('masseur/delete/confirm/<int:pk>/', MasseurConfirmDeleteView.as_view(), name='masseur_confirm_delete'),
+    path('masseur/delete/<int:pk>/', MasseurDeleteView.as_view(), name='masseur_delete'),
+    path('masseur/list/', MasseurListAdminView.as_view(), name='masseur_list'),
 ]

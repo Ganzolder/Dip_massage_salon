@@ -20,6 +20,10 @@
 
 
     <style>
+
+        body {
+        background-color: #ffefd9; /* Цвет фона */
+    }
         .bd-placeholder-img {
           font-size: 1.125rem;
           text-anchor: middle;
@@ -96,12 +100,17 @@
         .bd-mode-toggle .dropdown-menu .active .bi {
           display: block !important;
         }
-
         .hero-image-container {
     position: relative;
     width: 100%;
     object-fit: cover;
-    max-height: 500px;
+    max-height: 400px;
+}
+        .hero-image-container-sm {
+    position: relative;
+    width: 100%;
+    object-fit: cover;
+    max-height: 200px;
 }
 
 .hero-image {
@@ -111,6 +120,15 @@
     object-fit: cover; /* Сохранение пропорций и заполнение контейнера */
     display: block;
     opacity: 1;
+}
+.hero-image-top {
+    width: 100%;
+    object-fit: cover; /* Сохранение пропорций и заполнение контейнера */
+    display: block;
+    position: absolute;
+    top: -300%;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .hero-text {
@@ -141,10 +159,17 @@
 
 
 }
-        .bg-dark-t {
+    .bg-dark-t {
     background-color: rgba(0, 0, 0, 0.2); /* Цвет фона с прозрачностью 50% (0.5) */
     /* Другие стили */
 }
+    .custom-bg-color {
+    background-color: #f0f0f0;
+    }
+    .custom-bg-image {
+    background: url('/path/to/your/image.png') no-repeat center center;
+    background-size: cover;
+    }
     </style>
 
 
@@ -179,8 +204,10 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'service:index' %}">Главная</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'service:services_list' %}">Услуги</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Блог</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Личный кабинет</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'users:register' %}">Зарегистрироваться</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'users:user_detail' %}">Ваши записи на
+                        массаж</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'users:register' %}">Зарегистрироваться</a>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'users:login' %}">Войти</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'users:logout' %}">Выйти</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">
@@ -195,75 +222,39 @@
 </nav>
 
 <div class="col--md-5 p-lg-1 mx-auto my-1">
-<div class="d-flex gap-5 justify-content-center lead fw-normal">
+    <div class="d-flex gap-5 justify-content-center lead fw-normal">
 
-    <a class="icon-link" href="{% url 'service:services_form' %}">
-        Добавить услугу
-    </a>
         <a class="icon-link" href="{% url 'service:services_form' %}">
-        Массажисты
-    </a>
+            Добавить услугу
+        </a>
+        <a class="icon-link" href="{% url 'users:masseur_list' %}">
+            Массажисты
+        </a>
         <a class="icon-link" href="{% url 'service:app_list' %}">
-        Записи на массаж
-    </a>
+            Записи на массаж
+        </a>
 
-</div>
+    </div>
 </div>
 
 {% block content %}
 {% endblock %}
 
 
-<footer class="container py-5">
+<footer class="container py-3">
     <div class="row">
-        <div class="col-12 col-md">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor"
-                 stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="d-block mb-2" role="img"
-                 viewBox="0 0 24 24"><title>Product</title>
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"/>
-            </svg>
+        <div class="col-12 col-lg text-center">
+            <h5>О нас</h5>
+            <ul class="list-unstyled text-small ">
+                <li><a class="link-secondary text-decoration-none align-center" href="#">Контакты</a></li>
+                <li><a class="link-secondary text-decoration-none" href="#">+7 9xx 932 34 44</a></li>
+                <li><a class="link-secondary text-decoration-none" href="#">juli_patchouli@gmail.com</a></li>
+                <li><a class="link-secondary text-decoration-none" href="https://www.instagram.com/juli_patchouli/">Instagram</a></li>
+
+                </ul>
             <small class="d-block mb-3 text-body-secondary">&copy; 2024–2024</small>
         </div>
-        <div class="col-6 col-md">
-            <h5>Features</h5>
-            <ul class="list-unstyled text-small">
-                <li><a class="link-secondary text-decoration-none" href="#">Cool stuff</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Random feature</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Team feature</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Stuff for developers</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Another one</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Last time</a></li>
-            </ul>
-        </div>
-        <div class="col-6 col-md">
-            <h5>Resources</h5>
-            <ul class="list-unstyled text-small">
-                <li><a class="link-secondary text-decoration-none" href="#">Resource name</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Resource</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Another resource</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Final resource</a></li>
-            </ul>
-        </div>
-        <div class="col-6 col-md">
-            <h5>Resources</h5>
-            <ul class="list-unstyled text-small">
-                <li><a class="link-secondary text-decoration-none" href="#">Business</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Education</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Government</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Gaming</a></li>
-            </ul>
-        </div>
-        <div class="col-6 col-md">
-            <h5>About</h5>
-            <ul class="list-unstyled text-small">
-                <li><a class="link-secondary text-decoration-none" href="#">Team</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Locations</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Privacy</a></li>
-                <li><a class="link-secondary text-decoration-none" href="#">Terms</a></li>
-            </ul>
-        </div>
-    </div>
+
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"

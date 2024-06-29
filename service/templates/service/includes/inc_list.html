@@ -8,24 +8,25 @@
                 <div class="row">
 
                     {% for object in objects_list %}
-                    <div class="col-md-6 mb-4">
-                        <div class="card mb-4 shadow-sm">
-                            <div class="card-header py-3">
+                    <div class="col-md-6 mb-4 ">
+                        <div class="card mb-4 shadow-sm d-flex align-items-stretch h-100 ">
+
                                 {% if object.image %}
-                                <img src="{{ object.image.url }}" alt="{{ object.title }}" class="img-fluid">
+                                <img src="{{ object.image.url }}" alt="{{ object.title }}" class="img-fluid card-img-top" style="height: 300px; object-fit: cover;">
                                 {% endif %}
-                            </div>
+
                             <a href="{% url 'service:services_detail' object.pk %}"
                                style="text-decoration: none; color: inherit;">
-                                <div class="card-body">
-                                    <h1 class="card-title pricing-card-title text-end">{{ object.price }}</h1>
-                                    <h3 class="text-body-secondary fw-light"> {{ object.title }}</h3>
+                                <div class="card-body text-bg-dark flex-fill" >
+                                    <h1 class="card-title pricing-card-title text-end">{{ object.price }}р. / 90 мин</h1>
+                                    <h3 class="text-body-light fw-light"> {{ object.title }}</h3>
                                     <ul class="list-unstyled mt-3 mb-4">
                                         <li>{{ object.content|truncatechars_html:150 }}</li>
+                                        <li  class="text-end">Читать далее...</li>
 
                                     </ul>
 
-                                    <a class="w-100 btn btn-lg btn-outline-dark mb-3"
+                                    <a class="w-100 btn btn-lg btn-outline-light mb-3"
                                        href="{% url 'service:app_form' service_id=object.id %}">Записаться</a>
                                     <a href="{% url 'service:update_form' object.pk %}" type="button"
                                        class="w-100 mb-4 btn btn-lg btn-outline-primary">Редактировать</a>

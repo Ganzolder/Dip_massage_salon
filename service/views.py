@@ -19,10 +19,9 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        '''context['num_recipients'] = Recipient.objects.filter(creator=user).count()
-        context['num_messages'] = Message.objects.filter(creator=user).count()
-        context['num_posts'] = Post.objects.filter(creator=user).count()'''
+
+        top_services = Services.objects.filter(top_service=True)
+        context['top_services'] = top_services
         return context
 
 
@@ -107,40 +106,34 @@ class ApppointmentDetailView(DetailView):
 class ApppointmentUpdateView(UpdateView):
     model = Apppointment
     form_class = ApppointmentForm
-    success_url = reverse_lazy('service:apppointment_form_success')
+    success_url = reverse_lazy('service:app_list')
 
     def get_initial(self):
         initial = super().get_initial()
+
         service_id = self.kwargs.get('service_id')
+
         if service_id:
             initial['service'] = service_id
         return initial
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+
         kwargs['user'] = self.request.user
         return kwargs
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
+
         self.object.creator = self.request.user
 
-        current_date = self.object
-        print(self.object.date)
         # Получаем новое значение date из POST запроса
         new_date_str = self.request.POST.get('date')
 
         if new_date_str:
             new_date = parse_datetime(new_date_str)
             self.object.date = make_aware(new_date)
-        else:
-            # Если поле date не заполнено, возвращаем ошибку
-            form.add_error('date', 'Заполните поле даты и времени.')
-            return self.form_invalid(form)
-
-        # Если текущее значение date не изменилось, сохраняем его
-        if current_date:
-            self.object.date = current_date
 
         self.object.save()
 
@@ -149,6 +142,7 @@ class ApppointmentUpdateView(UpdateView):
     def get_context_data(self, *args, **kwargs):
 
         context_data = super().get_context_data(**kwargs)
+
         return context_data
 
 
@@ -163,7 +157,7 @@ class ApppointmentDeleteView(DeleteView):
         obj.delete()
 
         # Перенаправляем на нужную страницу после удаления
-        return redirect('service:apppointment_form')
+        return redirect('service:app_list')
 
 
 class ApppointmentConfirmDeleteView(TemplateView):
@@ -182,7 +176,7 @@ class ApppointmentListAdminView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context_data = super().get_context_data(*args, **kwargs)
-        context_data['objects_list'] = Apppointment.objects.all()
+        context_data['objects_list'] = Apppointment.objects.all().order_by('date')
         return context_data
 
 
