@@ -31,8 +31,7 @@
                                       class="col-12 col-form-label form-floating">
                                     {% csrf_token %}
                                     <div class="mb-3">
-                                        <h4 class="my-0 fw-normal">Дата и время записи: {{ object.date|date:"Y-m-d H:i"
-                                            }}</h4>
+                                        <h4 class="my-0 fw-normal">Дата и время записи: {{ object.date|date:"Y-m-d H:i" }}</h4>
                                     </div>
                                     {{ form.as_p }}
                                     <div class="mb-3">
